@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script>
+  function getNews (url) {
+    let promise = new Promise((resolve, reject) => {
+      // 发送请求
+      let xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function () {
+        // if (xmlHttp.readyState === 4 && xmlHttp.status ==200) {
+        //   console.log(xmlHttp.responseText)
+        //   resolve('成功了')
+        // } else {
+        //   rejiect('失败了')
+        // }
+        if (xmlHttp.readyState == 4) {
+          if (xmlHttp.status ==200) {
+            console.log(xmlHttp.responseText)
+            resolve('成功了')
+          } else {
+            reject('失败了')
+          }
+        }
+        xmlHttp.open('GET', url)
+        xmlHttp.send()
+      }
+    })
+    return promise
+  }
+  getNews('http://localhost:3000')
+  .then((data) => {
+    console.log(data)
+    let commentUrl = JSON.parse(data).commentUrl
+    let url = 'http://localhost:3000' + commentUrl
+    return getNews(url)
+  },(error) => {
+    console.log(error)
+  })
+  .then((data) => {
+    console.log(data)
+  },(error) => {
+    console.log(error)
+  })
+</script>
+</html>
